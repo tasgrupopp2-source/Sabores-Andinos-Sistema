@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Movimientos de stock
+{% endblock %}
+
+{% block content %}
+
+<p class="antetitulo">Control de stock</p>
+<div class="encabezado">
+<div>
+<h1>Movimientos de stock</h1>
+<p>Historial de entradas, salidas y ajustes de inventario.</p>
+</div>
+<a class="boton" href="{% url 'pedidos:movimiento_crear' %}">Registrar movimiento</a>
+</div>
+
+{% if object_list %}
+<div class="tabla-scroll" tabindex="0" role="region" aria-label="Movimientos">
+<table>
+<caption>{{ paginator.count }} movimiento{{ paginator.count|pluralize:'s' }}</caption>
+<thead>
+<tr>
+<th scope="col">Fecha</th>
+<th scope="col">Producto</th>
+<th scope="col">Tipo</th>
+<th scope="col">Cantidad</th>
+<th scope="col">Motivo</th>
+<th scope="col">Registrado por</th>
+</tr>
+</thead>
+<tbody>
+{% for m in object_list %}
+<tr>
+<td>{{ m.fecha|date:'d/m/Y H:i' }}</td>
+<td>{{ m.producto }}</td>
+<td>{{ m.get_tipo_display }}</td>
+<td class="numero">{{ m.cantidad }}</td>
+<td>{{ m.motivo }}</td>
+<td>{{ m.registrado_por }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% include 'componentes/paginacion.html' %}
+{% else %}
+<div class="vacio">
+<h2>No hay movimientos registrados</h2>
+<p>Los movimientos se generan al cambiar estados de pedidos o al registrar ajustes manuales.</p>
+</div>
+{% endif %}
+
+{% endblock %}

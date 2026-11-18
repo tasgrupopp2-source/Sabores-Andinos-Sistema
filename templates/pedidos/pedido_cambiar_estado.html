@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Cambiar estado — Pedido #{{ object.pk }}
+{% endblock %}
+
+{% block content %}
+
+<div class="form-contenedor">
+<a class="volver" href="{{ object.get_absolute_url }}">← Volver al pedido</a>
+<p class="antetitulo">Pedido #{{ object.pk }} · {{ object.cliente }}</p>
+<h1>Cambiar estado</h1>
+<p>Estado actual: <strong>{{ object.get_estado_display }}</strong></p>
+
+<form method="post" class="panel">{% csrf_token %}{% include 'componentes/formulario.html' %}<div class="acciones">
+<button type="submit">Actualizar estado</button>
+<a href="{{ object.get_absolute_url }}">Cancelar</a>
+</div>
+</form>
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Nuevo pedido
+{% endblock %}
+
+{% block content %}
+
+<div class="form-contenedor">
+<a class="volver" href="{% url 'pedidos:lista' %}">← Volver a pedidos</a>
+<p class="antetitulo">Pedidos</p>
+<h1>Nuevo pedido</h1>
+
+<form method="post" class="panel">{% csrf_token %}
+{% include 'componentes/formulario.html' %}
+
+<h2>Productos del pedido</h2>
+{{ formset.management_form }}
+{% for f in formset %}
+<fieldset class="panel">
+<legend>Línea {{ forloop.counter }}</legend>
+{% for field in f %}
+{% if not field.is_hidden %}
+<div class="campo">
+<label for="{{ field.id_for_label }}">{{ field.label }}</label>
+{{ field }}
+{% if field.errors %}
+<div class="error" role="alert">{{ field.errors }}</div>
+{% endif %}
+</div>
+{% else %}
+{{ field }}
+{% endif %}
+{% endfor %}
+</fieldset>
+{% endfor %}
+{% if formset.non_form_errors %}
+<div class="error" role="alert">{{ formset.non_form_errors }}</div>
+{% endif %}
+
+<div class="acciones">
+<button type="submit">Crear pedido</button>
+<a href="{% url 'pedidos:lista' %}">Cancelar</a>
+</div>
+</form>
+</div>
+{% endblock %}

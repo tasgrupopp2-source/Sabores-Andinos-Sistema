@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Pedidos
+{% endblock %}
+
+{% block content %}
+
+<p class="antetitulo">Gestión de pedidos</p>
+<div class="encabezado">
+<div>
+<h1>Pedidos</h1>
+<p>Consultá y gestioná los pedidos de la organización.</p>
+</div>
+<a class="boton" href="{% url 'pedidos:crear' %}">Nuevo pedido</a>
+</div>
+<div class="herramientas">
+<form method="get" class="busqueda">
+<label for="estado">Filtrar por estado</label>
+<div>
+<select id="estado" name="estado">
+<option value="">Todos</option>
+<option value="pendiente" {% if request.GET.estado == 'pendiente' %}selected{% endif %}>Pendiente</option>
+<option value="en_preparacion" {% if request.GET.estado == 'en_preparacion' %}selected{% endif %}>En preparación</option>
+<option value="listo" {% if request.GET.estado == 'listo' %}selected{% endif %}>Listo</option>
+<option value="entregado" {% if request.GET.estado == 'entregado' %}selected{% endif %}>Entregado</option>
+<option value="cancelado" {% if request.GET.estado == 'cancelado' %}selected{% endif %}>Cancelado</option>
+</select>
+<button type="submit">Filtrar</button>
+</div>
+</form>
+</div>
+
+{% if object_list %}
+<div class="tabla-scroll" tabindex="0" role="region" aria-label="Pedidos">
+<table>
+<caption>{{ paginator.count }} pedido{{ paginator.count|pluralize:'s' }}</caption>
+<thead>
+<tr>
+<th scope="col">N.°</th>
+<th scope="col">Cliente</th>
+<th scope="col">Estado</th>
+<th scope="col">Fecha</th>
+<th scope="col">Acción</th>
+</tr>
+</thead>
+<tbody>
+{% for p in object_list %}
+<tr>
+<td><a href="{{ p.get_absolute_url }}"><strong>#{{ p.pk }}</strong></a></td>
+<td>{{ p.cliente }}</td>
+<td>{{ p.get_estado_display }}</td>
+<td>{{ p.creado|date:'d/m/Y H:i' }}</td>
+<td><a href="{% url 'pedidos:cambiar_estado' p.pk %}">Cambiar estado</a></td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% include 'componentes/paginacion.html' %}
+{% else %}
+<div class="vacio">
+<h2>{% if request.GET.estado %}No hay pedidos con ese estado{% else %}Todavía no hay pedidos{% endif %}</h2>
+<p>Comenzá creando un pedido para un cliente.</p>
+</div>
+{% endif %}
+
+{% endblock %}

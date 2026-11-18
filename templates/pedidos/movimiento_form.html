@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Registrar movimiento de stock
+{% endblock %}
+
+{% block content %}
+
+<div class="form-contenedor">
+<a class="volver" href="{% url 'pedidos:movimientos' %}">← Volver a movimientos</a>
+<p class="antetitulo">Control de stock</p>
+<h1>Registrar movimiento</h1>
+
+<form method="post" class="panel">{% csrf_token %}{% include 'componentes/formulario.html' %}<div class="acciones">
+<button type="submit">Registrar</button>
+<a href="{% url 'pedidos:movimientos' %}">Cancelar</a>
+</div>
+</form>
+</div>
+{% endblock %}

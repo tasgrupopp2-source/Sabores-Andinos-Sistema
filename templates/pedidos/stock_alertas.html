@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Alertas de stock
+{% endblock %}
+
+{% block content %}
+
+<p class="antetitulo">Control de stock</p>
+<div class="encabezado">
+<div>
+<h1>Productos con stock bajo</h1>
+<p>Productos cuyo stock es igual o menor al mínimo indicado.</p>
+</div>
+</div>
+<div class="herramientas">
+<form method="get" class="busqueda">
+<label for="minimo">Stock mínimo</label>
+<div>
+<input id="minimo" name="minimo" value="{{ minimo }}" type="number" min="0">
+<button type="submit">Filtrar</button>
+</div>
+</form>
+</div>
+
+{% if object_list %}
+<div class="tabla-scroll" tabindex="0" role="region" aria-label="Alertas de stock">
+<table>
+<caption>{{ paginator.count }} producto{{ paginator.count|pluralize:'s' }} con stock bajo</caption>
+<thead>
+<tr>
+<th scope="col">Producto</th>
+<th scope="col">Categoría</th>
+<th scope="col">Stock actual</th>
+</tr>
+</thead>
+<tbody>
+{% for p in object_list %}
+<tr>
+<td><a href="{{ p.get_absolute_url }}"><strong>{{ p.nombre }}</strong></a> <small>{{ p.codigo }}</small></td>
+<td>{{ p.categoria }}</td>
+<td class="numero">{{ p.stock }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+{% include 'componentes/paginacion.html' %}
+{% else %}
+<div class="vacio">
+<h2>No hay productos con stock bajo</h2>
+<p>Todos los productos tienen stock por encima del mínimo indicado.</p>
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Pedido #{{ object.pk }}
+{% endblock %}
+
+{% block content %}
+
+<a class="volver" href="{% url 'pedidos:lista' %}">← Volver a pedidos</a>
+<p class="antetitulo">{{ object.get_estado_display }}</p>
+<div class="encabezado">
+<h1>Pedido #{{ object.pk }}</h1>
+<a class="boton" href="{% url 'pedidos:cambiar_estado' object.pk %}">Cambiar estado</a>
+</div>
+<div class="detalle panel">
+<dl>
+<div>
+<dt>Cliente</dt>
+<dd><a href="{{ object.cliente.get_absolute_url }}">{{ object.cliente }}</a></dd>
+</div>
+<div>
+<dt>Creado por</dt>
+<dd>{{ object.creado_por }}</dd>
+</div>
+<div>
+<dt>Fecha</dt>
+<dd>{{ object.creado|date:'d/m/Y H:i' }}</dd>
+</div>
+</dl>
+{% if object.observaciones %}
+<h2>Observaciones</h2>
+<div class="prosa">{{ object.observaciones|linebreaksbr }}</div>
+{% endif %}
+</div>
+
+<h2>Detalle del pedido</h2>
+<div class="tabla-scroll" tabindex="0" role="region" aria-label="Detalle">
+<table>
+<thead>
+<tr>
+<th scope="col">Producto</th>
+<th scope="col">Cantidad</th>
+<th scope="col">Precio unit.</th>
+<th scope="col">Subtotal</th>
+</tr>
+</thead>
+<tbody>
+{% for d in object.detalles.all %}
+<tr>
+<td>{{ d.producto }}</td>
+<td class="numero">{{ d.cantidad }}</td>
+<td class="numero">$ {{ d.precio_unitario }}</td>
+<td class="numero">$ {{ d.subtotal }}</td>
+</tr>
+{% endfor %}
+</tbody>
+<tfoot>
+<tr>
+<td colspan="3"><strong>Total</strong></td>
+<td class="numero"><strong>$ {{ object.total }}</strong></td>
+</tr>
+</tfoot>
+</table>
+</div>
+
+{% endblock %}
